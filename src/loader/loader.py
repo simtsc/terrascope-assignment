@@ -1,13 +1,15 @@
 import logging
-import pandas as pd
+import sys
 from pathlib import Path
-from sqlalchemy import create_engine, Column, Integer, String
+
+import pandas as pd
+from config import Config
+from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.engine.url import URL
+from sqlalchemy.exc import DBAPIError, SQLAlchemyError
 from sqlalchemy.orm import declarative_base
 
-from config import Config
-
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)  # TODO: make configurable
 
 Base = declarative_base()
 
@@ -31,12 +33,17 @@ db_url = URL.create(**db_params)
 logging.debug(db_url)
 
 engine = create_engine(db_url)
-Base.metadata.create_all(bind=engine)
 
 data_path = Path('/data')
 dfs = {f.stem: pd.read_csv(f) for f in data_path.glob('*.csv')}
 
-with engine.connect() as conn:
-    with conn.begin():
-        for name, df in dfs.items():
-            df.to_sql(name, con=conn, if_exists='replace', index='id')
+try:
+    Base.metadata.create_all(bind=engine)
+
+    with engine.connect() as conn:
+        with conn.begin():
+            for name, df in dfs.items():
+                df.to_sql(name, con=conn, if_exists='replace', index='id')
+except (DBAPIError, SQLAlchemyError) as sqlaerr:
+    logging.error(sqlaerr)
+    sys.exit(1)
