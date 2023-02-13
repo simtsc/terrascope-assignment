@@ -1,1 +1,4 @@
-modin[all]
+pandas
+pydantic
+pymysql
+sqlalchemy
