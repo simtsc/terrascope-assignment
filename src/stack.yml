@@ -35,5 +35,27 @@ services:
         delay: 5s
         max_attempts: 10
 
+  reader:
+    build:
+      context: ./reader
+      dockerfile: dockerfile
+    depends_on:
+      - loader
+    networks:
+      - backend
+    volumes:
+      - ./data:/data
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_DATABASE: Terrascope
+      DB_PASSWORD: Terrascope
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+
 networks:
   backend:
