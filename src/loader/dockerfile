@@ -1,18 +1,19 @@
-FROM alpine
+FROM continuumio/miniconda3
 
-ENV DB_NAME ""
-ENV DB_USER ""
+ENV DB_DATABASE ""
+ENV DB_USERNAME ""
 ENV DB_PASSWORD ""
 ENV DB_HOST ""
 ENV DB_PORT 3306
+ENV DB_DRIVERNAME "mysql+pymysql"
 
-ADD loader.sql /tmp/
+COPY requirements.txt /app/
+COPY loader.py /app/
+COPY config.py /app/
+WORKDIR /app
 
-RUN apk update && \
-    apk add mysql-client
+RUN pip install -r requirements.txt
 
-CMD mysql --database=${DB_NAME} \
-          --user=${DB_USER} \
-          --password=${DB_PASSWORD} \
-          --host=${DB_HOST} \
-          --port=${DB_PORT} < /tmp/loader.sql
+ENTRYPOINT ["python"]
+
+CMD ["loader.py"]

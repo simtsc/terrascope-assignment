@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    networks:
+      - backend
+    environment:
+      MYSQL_DATABASE: Terrascope
+      MYSQL_ROOT_PASSWORD: Terrascope
+    ports:
+      - 3306:3306
+
+  loader:
+    build:
+      context: ./loader
+      dockerfile: dockerfile
+    depends_on:
+      - db
+    networks:
+      - backend
+    volumes:
+      - ./data:/data
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_DATABASE: Terrascope
+      DB_PASSWORD: Terrascope
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+
+networks:
+  backend:
