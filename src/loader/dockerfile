@@ -1,4 +1,18 @@
 FROM alpine
+
+ENV DB_NAME ""
+ENV DB_USER ""
+ENV DB_PASSWORD ""
+ENV DB_HOST ""
+ENV DB_PORT 3306
+
+ADD loader.sql /tmp/
+
 RUN apk update && \
     apk add mysql-client
-CMD mysql < loader.sql
+
+CMD mysql --database=${DB_NAME} \
+          --user=${DB_USER} \
+          --password=${DB_PASSWORD} \
+          --host=${DB_HOST} \
+          --port=${DB_PORT} < /tmp/loader.sql
