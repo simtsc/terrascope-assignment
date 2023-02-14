@@ -1,0 +1,10 @@
+name: Terrascope
+channels:
+  - defaults
+dependencies:
+  - ipython
+  - jupyter
+  - pandas
+  - python=3.10
+  - pip:
+    - cookiecutter
