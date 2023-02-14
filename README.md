@@ -51,7 +51,7 @@ Project Organization
 Assuming `conda` is available in your shell you can run the following from the root of this repository to create and activate an anaconda environment called `Terrascope`, and to run the `jupyter notebook` server:
 
 ```
-conda create --file environment.yml
+conda env create --file environment.yml
 conda activate Terrascope
 jupyter notebook notebooks/data_analysis.ipynb
 ```
