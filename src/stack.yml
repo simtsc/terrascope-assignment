@@ -22,7 +22,7 @@ services:
     networks:
       - backend
     volumes:
-      - ./data:/data
+      - ../data/raw:/data
     environment:
       DB_HOST: db
       DB_PORT: 3306
