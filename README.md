@@ -43,6 +43,7 @@ Project Organization
         │
         └── stack.yml              <- Docker-compose file to run all containers
 
+This project was initialized with the [cookiecutter data science template](https://github.com/drivendata/cookiecutter-data-science). The folder structure has been modified to fit the needs of this project.
 
 ## Working with the Repository
 
