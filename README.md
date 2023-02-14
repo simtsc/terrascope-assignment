@@ -19,7 +19,7 @@ Project Organization
     |
     ├── data
     │   ├── misc                   <- Additional data not directly used by the application, e.g. sample data.
-    │   └── raw                    <- The original, immutable data dump.
+    │   └── raw                    <- The original, immutable data dump. Put people.csv and places.csv here.
     |
     ├── notebooks                  <- Jupyter notebooks for EDA and experimentation.
     │
