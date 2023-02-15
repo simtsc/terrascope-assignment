@@ -75,7 +75,26 @@ Both services, `loader` and `reader`, utilize the popular `SQLAlchemy` python pa
 
 #### Loader
 
-The `loader` service uses a simple data model with 2 tables. The tables are created, if they don't exist. Next, all CSV files under `/data` are loaded into a dictionary. A database connection and corresponding session are created via context managers. A loop iteratively writes the data to the database. SQL and database driver exceptions/errors will terminate the container with an exit code of `1`. Loading all CSV files beforehand is a trade-off of using more RAM for loading all data at once while keeping the database connection open for a shorter period of time.
+The `loader` service uses a simple data model with 2 tables. The tables are created, if they don't exist. 
+
+**people**
+| Column         | DType                  |
+| -------------- | ---------------------- |
+| id             | Integer, Primary Key   |
+| given_name     | VARCHAR(32)            |
+| family_name    | VARCHAR(32)            |
+| date_of_birth  | VARCHAR(32)            |
+| place_of_birth | VARCHAR(32)            |
+
+**places**
+| Column        | DType                 |
+| ------------- | --------------------- |
+| id            | Integer, Primary Key  |
+| city          | VARCHAR(32)           |
+| county        | VARCHAR(32)           |
+| country       | VARCHAR(32)           |
+
+Next, all CSV files under `/data` are loaded into a dictionary. A database connection and corresponding session are created via context managers. A loop iteratively writes the data to the database. SQL and database driver exceptions/errors will terminate the container with an exit code of `1`. Loading all CSV files beforehand is a trade-off of using more RAM for loading all data at once while keeping the database connection open for a shorter period of time.
 
 #### Reader
 
@@ -92,6 +111,7 @@ The SQL query creates an inner join of the `people` and `places` table, matched 
 
 ### Data Model
   * Introduce foreign key constraints, e.g. to cascade updates
+  * Use `Date` DType for `date_of_birth`
   * For large tables, use partitioning
   * For large tables, create an aggregate table to reduce runtime load from queries
   
